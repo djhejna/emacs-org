@@ -1,0 +1,49 @@
+;;; (make-directory "~/org-roam")
+;;; (setq org-roam-directory (file-truename "~/org-roam"))
+
+;;; (org-roam-db-autosync-mode)
+
+
+;;; (setq org-roam-node-display-template
+;;;       (concat "${title:*} "
+;;;               (propertize "${tags:10}" 'face 'org-tag)))
+
+(use-package org-roam
+  :ensure t
+  :init
+  ;; Crucial: This must be set before org-roam is loaded
+  (setq org-roam-v2-ack t)
+  :custom
+  ;; Define where you want to store your notes directory
+  ;;   (org-roam-directory (file-truename "~/org-roam"))
+  (org-roam-directory (file-truename "c:/Users/d/OneDrive/Documents/org-roam/"))
+  (org-roam-dailies-directory "daily/") ;; Relative path: ~/RoamNotes/daily/
+  :bind (("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+	 ("C-c n l" . org-roam-buffer-toggle)
+         ;; Dailies/Journaling support (Optional)
+         ;; ("C-c n d j" . org-roam-dailies-capture-today)
+	 )
+ ;; :bind-keymap
+;;  ("C-c n d" . org-roam-dailies-map) ;; Sets up the prefix for dailies
+ 
+  :config
+  ;;(require 'org-roam-dailies) ;; Load the extension
+ 
+  ;; since on windows, use emacs' built in sqlite implementation
+  (setq org-roam-database-connector 'sqlite-builtin)
+
+  ;; Automatically sync the database cache on startup/file changes
+  (org-roam-db-autosync-mode))
+
+(use-package org-roam-ui
+  :ensure t
+  :after org-roam
+  :custom
+  (org-roam-ui-sync-theme t)
+  (org-roam-ui-follow t)
+  (org-roam-ui-update-on-save t)
+  (org-roam-ui-open-on-start t))
+ 
